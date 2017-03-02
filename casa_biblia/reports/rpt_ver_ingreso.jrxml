@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_ver_det_compra" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb04d57d-b54c-4098-a0a7-b9d574f97fcf">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="compra" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tienda" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     empresas.`razon_social` AS erazon_social,
+     empresas.`direccion` AS edireccion,
+     ingresos.`empresa` AS empresa,
+     almacenes.`nombre` AS almacenes,
+     almacenes.`direccion` AS adireccion,
+     proveedores.`ruc_proveedor` AS ruc_proveedor,
+     proveedores.`razon_social` AS prazon_social,
+     proveedores.`direccion` AS pdireccion,
+     tipo_documento.`nombre` AS tipo_documento,
+     ingresos.`serie` AS serie,
+     ingresos.`numero` AS numero,
+     ingresos.`fecha` AS fecha,
+     moneda.`corto` AS moneda,
+     ingresos.`tc` AS tc,
+     ingresos.`fecha_registro` AS fecha_registro,
+     detalle_ingreso.`cantidad_compra` AS cantidad_compra,
+     detalle_ingreso.`precio_compra` AS precio_compra,
+     detalle_ingreso.`cantidad_caja` AS cantidad_caja,
+     productos.`codigo_externo` AS codigo_externo,
+     productos.`descripcion` AS productos,
+     productos.`clase_familia` AS clase_familia,
+     unidad_medida.`corto` AS unidad_medida,
+     familia_productos.`descripcion` AS familia,
+     clasificacion_familia.`descripcion` AS clasificacion
+FROM
+     `empresas` empresas INNER JOIN `ingresos` ingresos ON empresas.`ruc_empresa` = ingresos.`empresa`
+     INNER JOIN `almacenes` almacenes ON ingresos.`id_almacen` = almacenes.`id_almacen`
+     AND almacenes.`empresa` = ingresos.`empresa`
+     INNER JOIN `proveedores` proveedores ON ingresos.`ruc_proveedor` = proveedores.`ruc_proveedor`
+     INNER JOIN `tipo_documento` tipo_documento ON ingresos.`id_tido` = tipo_documento.`id_tido`
+     INNER JOIN `moneda` moneda ON ingresos.`id_moneda` = moneda.`id_moneda`
+     INNER JOIN `detalle_ingreso` detalle_ingreso ON ingresos.`id_ingreso` = detalle_ingreso.`id_ingreso`
+     AND ingresos.`id_almacen` = detalle_ingreso.`id_almacen`
+     AND ingresos.`empresa` = detalle_ingreso.`empresa`
+     AND ingresos.`anio` = detalle_ingreso.`anio`
+     INNER JOIN `productos` productos ON detalle_ingreso.`id_producto` = productos.`id_producto`
+     INNER JOIN `unidad_medida` unidad_medida ON productos.`id_und_med` = unidad_medida.`id_und_med`
+     INNER JOIN `familia_productos` familia_productos ON productos.`familia` = familia_productos.`id`
+     INNER JOIN `clasificacion_familia` clasificacion_familia ON productos.`clase_familia` = clasificacion_familia.`id`
+     AND clasificacion_familia.`familia` = productos.`familia`
+     AND familia_productos.`id` = clasificacion_familia.`familia`
+WHERE
+     ingresos.id_almacen = $P{tienda}
+     and ingresos.empresa = $P{empresa}
+     and ingresos.anio = $P{anio}
+     and ingresos.id_ingreso = $P{compra}
+ORDER BY productos.`descripcion` ASC, productos.codigo_externo asc]]>
+	</queryString>
+	<field name="erazon_social" class="java.lang.String"/>
+	<field name="edireccion" class="java.lang.String"/>
+	<field name="empresa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="almacenes" class="java.lang.String"/>
+	<field name="adireccion" class="java.lang.String"/>
+	<field name="ruc_proveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prazon_social" class="java.lang.String"/>
+	<field name="pdireccion" class="java.lang.String"/>
+	<field name="tipo_documento" class="java.lang.String"/>
+	<field name="serie" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="moneda" class="java.lang.String"/>
+	<field name="tc" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_registro" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad_compra" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precio_compra" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad_caja" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigo_externo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="productos" class="java.lang.String"/>
+	<field name="clase_familia" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unidad_medida" class="java.lang.String"/>
+	<field name="familia" class="java.lang.String"/>
+	<field name="clasificacion" class="java.lang.String"/>
+	<variable name="fila" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[1]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="182" splitType="Stretch">
+			<image>
+				<reportElement mode="Transparent" x="0" y="0" width="202" height="46" uuid="a44ae621-3ee7-42c8-9612-c8f2b59db3a9"/>
+				<imageExpression><![CDATA["http://www.lunasystemsperu.com/casa_biblia/logo_CB.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="218" y="0" width="354" height="46" uuid="3c6929da-adf8-4f54-9266-2c11e0b9bbb6"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INGRESO DE MERCADERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="62" width="138" height="15" uuid="b922bed9-194f-487c-8ad3-b7cb0fa5c9f7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS GENERALES:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="77" width="100" height="15" uuid="f7bae34e-8cc4-4d94-b392-f122e69d2376"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Almacen Destino:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="92" width="100" height="15" uuid="73aa649b-0f3d-4ad3-b6d3-2b1e5ca0c867"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="77" width="102" height="15" uuid="31a0d433-5bb1-429d-9fe9-df1191e5c2db"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{almacenes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="92" width="100" height="15" uuid="6b4c42c4-610e-4b4a-a465-456bfc872219"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ruc_proveedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="92" width="354" height="15" uuid="b5c11ee6-10c1-4a95-b9a4-28f15ec2abbc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prazon_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="107" width="472" height="15" uuid="c56e3682-f480-41e4-9ae6-d3a93916f7da"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pdireccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="122" width="100" height="15" uuid="e757aec0-4645-44a6-8837-e7d4b20e6186"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Compra:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="100" y="122" width="130" height="15" uuid="84a89437-e5c8-48bf-b828-4fbd5e4f7e57"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="100" y="137" width="130" height="15" uuid="763fa282-75fb-401f-b34e-958399706ec6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_registro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="137" width="100" height="15" uuid="3c0f5808-6333-46b5-a1e5-06df6a39a2a2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Registro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="122" width="113" height="15" uuid="c93c6aa5-15d0-4b43-9d86-5cfdc976a335"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento Ingreso:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="413" y="122" width="159" height="15" uuid="8f3cb07b-3748-42c8-935c-283135c51d4f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_documento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="137" width="113" height="15" uuid="f3f0fdd1-38c8-4300-b4eb-5c99d958fbc8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serie y Numero de Doc:]]></text>
+			</staticText>
+			<textField pattern="0000">
+				<reportElement x="413" y="137" width="60" height="15" uuid="3a8d7c8c-fdb1-467f-85ec-a4d079366e27"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{serie}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0000000">
+				<reportElement x="473" y="137" width="99" height="15" uuid="5705719f-512c-4570-8fe7-795815d0639d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="77" width="100" height="15" uuid="1926bc6c-5f98-499c-81fc-fde2926659ee"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="318" y="77" width="254" height="15" uuid="14ab72b2-253f-4fbe-ac77-fee3cb860f5f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{erazon_social}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="152" width="100" height="15" uuid="878dac92-a72c-4265-8ef1-d25c6800a318"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Moneda Compra:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="152" width="100" height="15" uuid="82c0173e-ae93-418d-995a-79d7b38a8d8b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="152" width="100" height="15" uuid="4343cca6-d145-4d4a-a23f-905a5defae1d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="152" width="113" height="15" uuid="8fd30298-dfce-4376-bc05-f067c4a87cb4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Cambio:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="23" height="15" uuid="509e4cd0-d19b-48a3-9a5b-6f0f1d9ea821"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="0" width="29" height="15" uuid="d4624d40-83ac-4aeb-8945-1d06f03cbdcd"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Und.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="0" width="254" height="15" uuid="cad49078-975d-43a3-bcf6-8a8e7622cb02"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripcion ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="0" width="45" height="15" uuid="97a68424-f2b4-4f39-879a-3e5dcf8973ff"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="###0;-###0">
+				<reportElement x="0" y="3" width="23" height="15" uuid="31cfedd9-a99d-4de4-989e-95fa6afa205f"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_compra}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="26" y="3" width="29" height="15" uuid="eec21831-b9d9-414d-8973-417bc076a31d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad_medida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="116" y="3" width="285" height="15" uuid="f2267747-790b-4905-8a59-a2b26dc8b87d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{codigo_externo}.equals("")) ? $F{productos} : $F{codigo_externo} + " - " + $F{productos} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="401" y="3" width="112" height="15" uuid="eaed6499-7bd4-4ce9-90c4-3b30b4df359b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clasificacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="55" y="3" width="45" height="15" uuid="a65e0e45-76c7-40b7-8026-e02ea3e2d8ef"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_compra}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="513" y="3" width="59" height="15" uuid="8ffdfe66-e250-4a68-9edc-b2babcf78ea4"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{cantidad_compra} * $F{precio_compra} * $F{cantidad_caja}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

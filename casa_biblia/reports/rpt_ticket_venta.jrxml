@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_ticket_venta" language="groovy" pageWidth="178" pageHeight="737" columnWidth="178" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="1d67b210-e34b-42a3-8873-7a23980342a3">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_venta" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id_almacen" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="monto_letras" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     clientes.`nro_documento` AS cnro_documento,
+     clientes.`nombre` AS cnombre,
+     clientes.`direccion` AS cdireccion,
+     ventas.`serie` AS serie,
+     ventas.`numero` AS numero,
+     pedido_cliente.`fecha_cobro` AS fecha_cobro,
+     empresas.`ruc_empresa` AS eruc_empresa,
+     empresas.`razon_social` AS erazon_social,
+     empresas.`direccion` AS edireccion,
+     almacenes.`nombre` AS ntienda,
+     almacenes.`direccion` AS dtienda,
+     empleados.`nombres` AS emp_nombre,
+     empleados.`ape_pat` AS emp_ape_pat,
+     productos.`descripcion` AS Pdescripcion,
+     productos.`codigo_externo` AS Pcodigo_externo,
+     productos.`afecto_igv` AS Pafecto_igv,
+     unidad_medida.`corto` AS unidad_medida,
+     empleados_A.`nombres` AS vnombres,
+     empleados_A.`ape_pat` AS vape_pat,
+     empleados_B.`nombres` AS cnombres,
+     empleados_B.`ape_pat` AS cape_pat,
+     detalle_venta.`cantidad` AS Pcantidad,
+     detalle_venta.`precio` AS Pprecio,
+     ventas.`nombre_cliente` AS vnombre_cliente,
+     ventas.`afecto` AS vafecto
+FROM
+     `ventas` ventas INNER JOIN `clientes` clientes ON ventas.`id_cliente` = clientes.`id_cliente`
+     INNER JOIN `pedido_cliente` pedido_cliente ON ventas.`pedido` = pedido_cliente.`id`
+     AND ventas.`empresa` = pedido_cliente.`empresa`
+     AND pedido_cliente.`anio` = ventas.`anio`
+     AND ventas.`id_almacen` = pedido_cliente.`tienda`
+     INNER JOIN `empresas` empresas ON ventas.`empresa` = empresas.`ruc_empresa`
+     INNER JOIN `almacenes` almacenes ON ventas.`id_almacen` = almacenes.`id_almacen`
+     AND ventas.`empresa` = almacenes.`empresa`
+     INNER JOIN `detalle_venta` detalle_venta ON ventas.`id_venta` = detalle_venta.`venta`
+     AND detalle_venta.`tienda` = ventas.`id_almacen`
+     AND detalle_venta.`empresa` = ventas.`empresa`
+     AND detalle_venta.`periodo` = ventas.`periodo`
+     INNER JOIN `productos` productos ON detalle_venta.`producto` = productos.`id_producto`
+     INNER JOIN `unidad_medida` unidad_medida ON productos.`id_und_med` = unidad_medida.`id_und_med`
+     INNER JOIN `empleados` empleados ON pedido_cliente.`vendedor` = empleados.`dni`
+     INNER JOIN `empleados` empleados_A ON pedido_cliente.`vendedor` = empleados_A.`dni`
+     INNER JOIN `empleados` empleados_B ON pedido_cliente.`cajero` = empleados_B.`dni`
+WHERE
+     ventas.`id_venta` = $P{id_venta}
+     and ventas.periodo = $P{periodo}
+     and ventas.id_almacen = $P{id_almacen} and ventas.empresa = $P{empresa}]]>
+	</queryString>
+	<field name="cnro_documento" class="java.lang.String"/>
+	<field name="cnombre" class="java.lang.String"/>
+	<field name="cdireccion" class="java.lang.String"/>
+	<field name="serie" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_cobro" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="eruc_empresa" class="java.lang.String"/>
+	<field name="erazon_social" class="java.lang.String"/>
+	<field name="edireccion" class="java.lang.String"/>
+	<field name="ntienda" class="java.lang.String"/>
+	<field name="dtienda" class="java.lang.String"/>
+	<field name="emp_nombre" class="java.lang.String"/>
+	<field name="emp_ape_pat" class="java.lang.String"/>
+	<field name="Pdescripcion" class="java.lang.String"/>
+	<field name="Pcodigo_externo" class="java.lang.String"/>
+	<field name="Pafecto_igv" class="java.lang.String"/>
+	<field name="unidad_medida" class="java.lang.String"/>
+	<field name="vnombres" class="java.lang.String"/>
+	<field name="vape_pat" class="java.lang.String"/>
+	<field name="cnombres" class="java.lang.String"/>
+	<field name="cape_pat" class="java.lang.String"/>
+	<field name="Pcantidad" class="java.lang.Double"/>
+	<field name="Pprecio" class="java.lang.Double"/>
+	<field name="vnombre_cliente" class="java.lang.String"/>
+	<field name="vafecto" class="java.lang.String"/>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Pprecio} * $F{Pcantidad}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="11" width="178" height="20" uuid="f1143f64-c206-4031-b4ef-7e37e05159a7"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eruc_empresa} + " - " + $F{erazon_social} + " Tel:  043-320111"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="178" height="11" uuid="a52b6821-2e2b-4288-be6a-72e1fbaf8a9a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[*** CASA DE LA BIBLIA ***]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="31" width="178" height="10" uuid="fe425f3c-de24-4de7-959e-292bb6bdb333"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{edireccion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="77" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="61" width="111" height="10" isRemoveLineWhenBlank="true" uuid="3f780c53-ef25-4dde-be7c-91215cbdc328"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{cnro_documento} == "00000000") ? "" : "RUC: " + $F{cnro_documento})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="51" width="178" height="10" isRemoveLineWhenBlank="true" uuid="1c0c1e7b-baf8-4ddf-9ac5-2bf763d0d475"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{cnro_documento} == "00000000") ? "CLIENTE: " + $F{vnombre_cliente} : "CIENTE: " + $F{cnombre})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="10" width="178" height="10" uuid="90c9e39d-3692-4d6b-9dd0-a26b160eebd1"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtienda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="20" width="178" height="11" uuid="ff4bca90-7aef-4bc2-8bf9-fb17e8f35df4"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{cnro_documento} == "00000000") ? "TICKET #: " + $F{serie} + " - " + $F{numero} : "TICKET FACTURA #: " + $F{serie} + " - " + $F{numero})]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement positionType="Float" mode="Transparent" x="0" y="41" width="178" height="10" uuid="cf454b8f-3e7c-490b-89ed-86992341e227"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SERIE: " + "PSSFIKA16080306"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="0" width="178" height="10" uuid="722782d6-3ff7-4a95-8695-9614b454dd1b"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TIENDA: " + $F{ntienda}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy    HH:mm a">
+				<reportElement positionType="Float" mode="Transparent" x="0" y="31" width="86" height="10" uuid="c3c91ecf-749d-460d-b704-e0ef1b312fc3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA EMISION: "]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="86" y="31" width="81" height="10" uuid="c381ae86-c95a-4131-a954-15c87ccf70b4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="178" height="10" uuid="0345dfdc-d5e8-4b40-8957-f852e85225e1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( (!$F{Pcodigo_externo}.equals("")) ? $F{Pcantidad} + " " + $F{unidad_medida} + " - " + $F{Pcodigo_externo}.trim() + " - " + $F{Pdescripcion}.trim() + " - S/ " + $F{Pprecio} : $F{Pcantidad} + " " + $F{unidad_medida} + " - " + $F{Pdescripcion}.trim() + " - S/ " + $F{Pprecio} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="74" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="86" y="26" width="58" height="10" uuid="f565f2ba-c3fc-48eb-9e50-3703ed01f76d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement mode="Transparent" x="0" y="36" width="178" height="10" uuid="9aa6bc30-cd15-4452-8905-7a983d5d747e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SON: " + $P{monto_letras}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="142" y="26" width="36" height="10" uuid="b25d80f1-8e2b-4748-85ea-082c9175a6a7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement mode="Transparent" x="0" y="51" width="178" height="10" uuid="f457961f-bb71-4449-884a-79dd429209b9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vendedor(a): " + $F{vnombres}.charAt(0) + "" + $F{vape_pat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement mode="Transparent" x="0" y="61" width="178" height="10" uuid="75ffd97f-3065-4a4c-9851-500271740bf5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cajero(a): " + $F{cnombres}.charAt(0) + "" + $F{cape_pat}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="86" y="16" width="58" height="10" uuid="eb0cbf72-14ae-47a6-bab7-1e459f0c9b49"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[IGV]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="142" y="16" width="36" height="10" uuid="1711b04f-df2d-4df1-abc2-266ada412a6f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{vafecto}.equals("0")) ? 0 : $V{total} / 1.18 * 0.18 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="142" y="6" width="36" height="10" uuid="6accab06-28d3-4e15-9a9f-d38a3d9905df"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{vafecto}.equals("0")) ? $V{total} : $V{total} / 1.18)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="86" y="6" width="58" height="10" uuid="5e640dd8-852a-4084-bd44-a4e0bf2a3a00"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="42"/>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_productos_venta_ayer" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a8e72341-6029-4a48-b04c-84e106b59b75">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="tienda" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     sum(detalle_venta.cantidad) AS cantidad_vendida,
+     productos.`codigo_externo` AS codigo_externo,
+     productos.`descripcion` AS pdescripcion,
+     detalle_venta.`cantidad` AS pcantidad,
+     detalle_venta.`precio` AS pprecio,
+     detalle_venta.`tienda` AS tienda,
+     detalle_venta.`empresa` AS empresa,
+     ventas.`fecha_venta` AS fecha_venta,
+     unidad_medida.`corto` AS umedida,
+     almacenes.`nombre` AS anombre,
+     productos.`precio` AS pprecio,
+     productos.`id_producto` AS id_producto,
+     familia_productos.`descripcion` AS familia
+FROM
+     `productos` productos INNER JOIN `detalle_venta` detalle_venta ON productos.`id_producto` = detalle_venta.`producto`
+     INNER JOIN `ventas` ventas ON detalle_venta.`empresa` = ventas.`empresa`
+     AND ventas.`periodo` = detalle_venta.`periodo`
+     AND ventas.`id_venta` = detalle_venta.`venta`
+     AND ventas.`id_almacen` = detalle_venta.`tienda`
+     INNER JOIN `almacenes` almacenes ON ventas.`id_almacen` = almacenes.`id_almacen`
+     AND ventas.`empresa` = almacenes.`empresa`
+     INNER JOIN `unidad_medida` unidad_medida ON productos.`id_und_med` = unidad_medida.`id_und_med`
+     INNER JOIN `familia_productos` familia_productos ON productos.`familia` = familia_productos.`id`
+WHERE
+     ventas.estado = 1
+     and ventas.fecha_venta = $P{fecha}
+     and detalle_venta.tienda = $P{tienda}
+     and detalle_venta.empresa = $P{empresa}
+GROUP BY
+     detalle_venta.producto
+ORDER BY
+	familia asc, productos.descripcion ASC, codigo_externo asc]]>
+	</queryString>
+	<field name="cantidad_vendida" class="java.lang.Double"/>
+	<field name="codigo_externo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pdescripcion" class="java.lang.String"/>
+	<field name="pcantidad" class="java.lang.Double"/>
+	<field name="pprecio" class="java.lang.Double"/>
+	<field name="tienda" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="empresa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_venta" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="umedida" class="java.lang.String"/>
+	<field name="anombre" class="java.lang.String"/>
+	<field name="id_producto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="familia" class="java.lang.String"/>
+	<variable name="suma_venta" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidad_vendida} * $F{pprecio}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="197" y="0" width="358" height="20" uuid="28377038-2da7-4205-a0e8-7f15ad379f48"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Productos Vendidos Ayer ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="242" y="20" width="100" height="20" uuid="1a43fd47-ccd1-4d64-9f35-197fccf2abf7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="487" y="20" width="68" height="20" uuid="6ae81af8-2be9-4d4c-af9a-82e3f596bf32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_venta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="197" y="20" width="45" height="20" uuid="7089e5cb-002a-4b45-a637-bb64d2449d8f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tienda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="20" width="95" height="20" uuid="cc74bf6b-7d91-405c-aedc-025fa12bd6c1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Venta:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="133" y="0" width="373" height="12" uuid="3bcea27b-fc02-4e3b-9024-ba17abd00c3c"/>
+				<textElement>
+					<font fontName="Lucida Sans Typewriter" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="48" height="12" uuid="94a25f74-300e-4fb3-8700-48d60d39e902"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="0" width="38" height="12" uuid="121ea2de-356d-48dc-9386-3f5ccc708268"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[U. M.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="0" width="49" height="12" uuid="bca46288-d492-439a-84bf-9c65dd16cc71"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P. Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="86" y="0" width="47" height="12" uuid="4e86dd5e-04ec-431c-bb25-a73feee5510e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C. Sist.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="133" y="2" width="324" height="12" uuid="fede326f-62cc-4ae3-93cf-cf23bebe0126"/>
+				<textElement>
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{codigo_externo}.equals("")) ? $F{pdescripcion} : $F{pdescripcion} + " - " + $F{codigo_externo})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="0" y="2" width="48" height="12" uuid="52c2f9e8-3a3e-4985-8aff-b152759fd7a0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pcantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="48" y="2" width="38" height="12" uuid="b65f1d60-af9f-4227-907f-66384d284fd3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{umedida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="506" y="2" width="49" height="12" uuid="ed770e4d-5b6c-4f0a-b983-4a2ba0e8a9da"/>
+				<textElement textAlignment="Right">
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pprecio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="2" width="47" height="12" uuid="057ca1fe-3db9-48ef-8608-e89336c1d4cb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_producto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="457" y="2" width="49" height="12" uuid="2c94d5e8-1b35-4ab0-ba73-282f8ca00f37"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{familia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="31">
+			<textField pattern="#,##0.00">
+				<reportElement x="506" y="16" width="49" height="15" uuid="787921fd-161e-41a4-84bd-aa9ef08680bc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{suma_venta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="430" y="16" width="76" height="15" uuid="d8b9aaa7-f074-4121-b4be-cb4ff75a6c34"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suma Venta:]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

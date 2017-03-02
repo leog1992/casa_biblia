@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_ventas_tienda_detalle" language="groovy" pageWidth="500" pageHeight="595" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1b433e90-1860-4311-8ce8-df565fb75a53">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idventa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tienda" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     productos.`codigo_externo` AS pcodigo_externo,
+     productos.`descripcion` AS pdescripcion,
+     detalle_venta.`cantidad` AS pcantidad,
+     detalle_venta.`precio` AS pprecio,
+     unidad_medida.`corto` AS unidad_medida
+FROM
+     `productos` productos INNER JOIN `detalle_venta` detalle_venta ON productos.`id_producto` = detalle_venta.`producto`
+     INNER JOIN `unidad_medida` unidad_medida ON productos.`id_und_med` = unidad_medida.`id_und_med`
+where detalle_venta.`empresa` = $P{empresa} and detalle_venta.`periodo` = $P{periodo} and detalle_venta.`tienda` = $P{tienda} and detalle_venta.`venta` = $P{idventa}]]>
+	</queryString>
+	<field name="pcodigo_externo" class="java.lang.String"/>
+	<field name="pdescripcion" class="java.lang.String"/>
+	<field name="pcantidad" class="java.lang.Double"/>
+	<field name="pprecio" class="java.lang.Double"/>
+	<field name="unidad_medida" class="java.lang.String"/>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="113" y="1" width="268" height="15" uuid="b46bfa1c-df8c-4c66-99f1-2741619819f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="0" width="42" height="15" uuid="fbbaedc1-26ae-4921-89a2-50951fc251a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="0" width="66" height="15" uuid="14c26ecb-53c9-434e-a07f-61eae0201c20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Und. Medida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="60" height="15" uuid="806cd640-b77e-4f8d-8e6d-779947498599"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="0" width="49" height="15" uuid="1b14562b-3ae4-4799-afe4-1fd87257565b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[SubTotal]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="15" width="485" height="1" uuid="4ed2b496-062b-4194-9c7d-76812e696133"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="113" y="2" width="268" height="10" uuid="6fb38997-e987-4c37-89cf-b785edabc134"/>
+				<textElement verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pdescripcion} + " - " + $F{pcodigo_externo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="2" width="66" height="10" uuid="0ca80eee-f1c0-4bee-9434-8ab11fd3e8c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad_medida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="402" y="2" width="39" height="10" uuid="b17fdbd8-ae1a-42f3-8470-026b47c5bc3d"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pprecio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="391" y="2" width="11" height="10" uuid="ffaa7305-4b04-4535-af03-cb5b9f71a4d4"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[S/.]]></text>
+			</staticText>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="460" y="2" width="30" height="10" uuid="78721297-0f04-41bd-936f-fa73c776d9be"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pcantidad} * $F{pprecio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="447" y="2" width="13" height="10" uuid="de7ed83a-3119-435f-9455-b538194a81e2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[S/.]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="5" y="2" width="42" height="10" uuid="cf276008-64c3-4f14-b1fe-16fff8f755ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pcantidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

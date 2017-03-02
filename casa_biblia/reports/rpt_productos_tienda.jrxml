@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_productos_tienda" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13ee6eea-2fa9-4b8c-90b6-416adf9704db">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="tienda" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     productos_almacenes.`ubicacion` AS pubicacion,
+     productos_almacenes.`cantidad_actual` AS pcantidad_actual,
+     productos.`codigo_externo` AS pcodigo_externo,
+     productos.`descripcion` AS pdescripcion,
+     familia_productos.`descripcion` AS fdescripcion,
+     almacenes.`nombre` AS anombre,
+     unidad_medida.`corto` AS unidad_medida,
+     productos.`precio` AS pprecio,
+     productos.`id_producto` AS pid_producto
+FROM
+     `productos_almacenes` productos_almacenes INNER JOIN `productos` productos ON productos_almacenes.`id_producto` = productos.`id_producto`
+     INNER JOIN `familia_productos` familia_productos ON productos.`familia` = familia_productos.`id`
+     INNER JOIN `unidad_medida` unidad_medida ON productos.`id_und_med` = unidad_medida.`id_und_med`
+     INNER JOIN `almacenes` almacenes ON productos_almacenes.`id_almacen` = almacenes.`id_almacen`
+     AND productos_almacenes.`empresa` = almacenes.`empresa`
+WHERE
+     productos_almacenes.id_almacen = $P{tienda}
+     and productos_almacenes.empresa = $P{empresa}
+ORDER BY
+     fdescripcion ASC,
+     pdescripcion ASC,
+     pcodigo_externo ASC]]>
+	</queryString>
+	<field name="pubicacion" class="java.lang.String"/>
+	<field name="pcantidad_actual" class="java.lang.Double"/>
+	<field name="pcodigo_externo" class="java.lang.String"/>
+	<field name="pdescripcion" class="java.lang.String"/>
+	<field name="fdescripcion" class="java.lang.String"/>
+	<field name="anombre" class="java.lang.String"/>
+	<field name="unidad_medida" class="java.lang.String"/>
+	<field name="pprecio" class="java.lang.Double"/>
+	<field name="pid_producto" class="java.lang.Integer"/>
+	<variable name="suma_venta" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pprecio} * $F{pcantidad_actual}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="76" splitType="Stretch">
+			<textField>
+				<reportElement x="145" y="26" width="100" height="20" uuid="4b3baba5-afca-4475-9001-3ed1bd5ae544"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="90" y="0" width="465" height="26" uuid="7343ba2a-b933-44d2-b447-52426eada36f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Productos por Tienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="26" width="55" height="20" uuid="0f5fd0db-3a5c-4b52-8e05-fac3f6e3c8f0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<text><![CDATA[Tienda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="46" width="55" height="20" uuid="4d8d4494-9f72-42b8-97a5-db6ad10a1770"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="145" y="46" width="100" height="20" uuid="8f46559c-d366-4bea-ae79-7ae216285934"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="26" width="80" height="20" uuid="c5aa3f59-2c93-40e1-91af-d6028151f9f4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="26" width="40" height="20" uuid="c4c6c716-71dc-49d7-8675-26940d871b51"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="36" height="20" uuid="cc775dc5-2a11-47bb-b27f-95d5d7529dac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[Cant. Act.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="0" width="34" height="20" uuid="a3039968-271f-458c-b159-24b03d2f237c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[Med.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="0" width="320" height="20" uuid="150ef38b-1fa4-4e1a-9434-364aa6bd7076"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="72" height="20" uuid="6cd83dad-039d-4b04-ab5a-295246c57d34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[Familia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="512" y="0" width="43" height="20" uuid="4a550773-fb38-4c09-8160-2f2a27ed232a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[P. V.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="72" y="0" width="48" height="20" uuid="ce40a041-f51d-47ad-8978-1d1b1b27b7b3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<text><![CDATA[Cod.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="0" y="2" width="36" height="12" uuid="694c66b3-7f95-48af-8d17-cc5f7b428b6d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pcantidad_actual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="2" width="34" height="12" uuid="fdf373e9-4766-418e-b8c3-e4a2c49145f5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad_medida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="120" y="2" width="320" height="12" uuid="b1615f06-ed7d-41ef-9939-5ec99b4aa94a"/>
+				<textElement>
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{pcodigo_externo}.equals("")) ? $F{pdescripcion} : $F{pdescripcion} + " __ CE: " + $F{pcodigo_externo})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="2" width="72" height="12" uuid="4a96b041-842a-4ddf-85cb-b4541610eef5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fdescripcion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="512" y="2" width="43" height="12" uuid="5d4c6907-e10b-4a3b-be8f-04b978fc5454"/>
+				<textElement textAlignment="Right">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pprecio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="74" y="2" width="46" height="12" uuid="07e8f515-f02a-4361-90a9-a92b64f1ed28"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Sans Typewriter" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pid_producto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="38">
+			<staticText>
+				<reportElement x="376" y="18" width="85" height="20" uuid="bf6de578-8784-4933-8ef2-7aac73e72a04"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<text><![CDATA[Monto Venta:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="461" y="18" width="94" height="20" uuid="a8689357-a264-4602-93a3-91577f2b17f4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Lucida Sans Typewriter"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{suma_venta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>
